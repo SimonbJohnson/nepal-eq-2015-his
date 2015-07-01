@@ -1,4 +1,5 @@
 var colors = ['#F44336','#673AB7','#009688','#FFEB3B','#FF9800','#9E9E9E'];  
+var scale_maxDate =new Date(2015, 5, 30);
 
 var timecount_chart = dc.lineChart("#time_count");
 var timestats1_chart = dc.compositeChart("#time_stats");
@@ -35,7 +36,7 @@ var awdAll = cf.groupAll().reduceSum(function(d){ return d.awd; });
 var pouAll = cf.groupAll().reduceSum(function(d){ return d.pou; });
 var bloodydiaAll = cf.groupAll().reduceSum(function(d){ return d.bloody_dia; });
 
-var xScaleRange = d3.time.scale().domain([new Date(2015, 4, 1), new Date(2015, 5, 1)]);
+var xScaleRange = d3.time.scale().domain([new Date(2015, 4, 1), scale_maxDate]);
 
 timecount_chart
         .width($('#time_count').width())
@@ -46,12 +47,13 @@ timecount_chart
         .xAxisLabel("Date")
         .yAxisLabel("Cases")
         .xAxis().ticks(8);
+timecount_chart.yAxis().ticks(8);
 
 timestats1_chart
         .width($('#time_stats').width())
         .height(200)
         .dimension(dateDimension)
-        .x(d3.time.scale().domain([new Date(2015, 4, 1), new Date(2015, 5, 1)]))
+        .x(d3.time.scale().domain([new Date(2015, 4, 1), scale_maxDate]))
         .rangeChart(timecount_chart)
         .elasticY(true)
         .compose([
@@ -63,12 +65,13 @@ timestats1_chart
         .yAxisLabel("Cases")
         .legend(dc.legend().x($('#time_count').width()-150).y(0).gap(5))
         .xAxis().ticks(8);
+timestats1_chart.yAxis().ticks(6);
         
 timestats2_chart
         .width($('#time_stats').width())
         .height(200)
         .dimension(dateDimension)
-        .x(d3.time.scale().domain([new Date(2015, 4, 1), new Date(2015, 5, 1)]))
+        .x(d3.time.scale().domain([new Date(2015, 4, 1), scale_maxDate]))
         .elasticY(true)
         .compose([
             dc.lineChart(timestats2_chart).group(ariGroup, 'ARI').colors(colors[2]),
@@ -84,7 +87,8 @@ timestats2_chart
         
 org_chart.width($('#rc_org').width()).height(300)
         .dimension(orgDimension)
-        .group(orgGroup);
+        .group(orgGroup)
+        .xAxis().ticks(5);
 
 under5_chart.width($('#age').width()).height(200)
         .dimension(under5Dimension)
